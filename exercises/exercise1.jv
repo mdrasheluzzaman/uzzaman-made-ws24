@@ -21,7 +21,8 @@ pipeline AirPipeline {
   }
 
   // 9. The HttpExtractor requires no input and produces a binary file as output.
-  // This file has to be interpreted, e.g., as text file.
+  // This file has to be interpreted, e.g., as text file. 
+  //
   block AirTextFileInterpreter oftype TextFileInterpreter { }
 
   // 10. Next, we interpret the text file as sheet.
