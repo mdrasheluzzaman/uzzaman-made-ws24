@@ -30,6 +30,5 @@ This dataset is taken from Kaggle.
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
 1. Load Data [#1][i1]
-2. ...
 
 [i1]: https://github.com/mdrasheluzzaman/uzzaman-made-ws24/issues/1
