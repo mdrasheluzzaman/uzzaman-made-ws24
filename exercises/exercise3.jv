@@ -1,107 +1,124 @@
-pipeline worldBankData {
-    dataExtractor 
-      -> dataXLSXInterpreter
-      -> dataXLSXSheetpicker
-      -> dataHeaderWriter
-      -> dataSelector
-      -> firstDataTableInterpreter
-      -> bondIssuanceDataLoader;
+pipeline worldBankData{
 
-    dataSelector
-      -> secondDataTableInterpreter
-      -> gdpPerCapitaLoader;
+ dataExtractor 
+    -> dataXLSXInterpreter
+    -> dataXLSXSheetpicker
+    -> dataHeaderWriter
+    -> dataSelector
+    -> firstDataTableInterpreter
+    -> bondIssuanceDataLoader;
 
 
-
-
-    block dataExtractor oftype HttpExtractor {
-
-
-
-     url: "https://thedocs.worldbank.org/en/doc/7d852628d96b9411d43e5d36d5dff941-0050062022/original/Graphs-Chapter-5-02082022.xlsx";
-
-    }
+  dataSelector
+    -> secondDataTableInterpreter
+    -> gdpPerCapitaLoader;
 
 
 
 
-    block dataXLSXInterpreter oftype XLSXInterpreter { }
+  block dataExtractor oftype HttpExtractor{
 
 
 
-    block dataXLSXSheetpicker oftype SheetPicker {
-        sheetName: 'Figure S5.1.2';
-    }
+    url: "https://thedocs.worldbank.org/en/doc/7d852628d96b9411d43e5d36d5dff941-0050062022/original/Graphs-Chapter-5-02082022.xlsx";
+
+
+  }
 
 
 
-    block dataSelector oftype CellRangeSelector {
-        select: range P2:S45;
-    }
+
+  block dataXLSXInterpreter oftype XLSXInterpreter{}
 
 
 
-    block dataHeaderWriter oftype CellWriter {
+  block dataXLSXSheetpicker oftype SheetPicker{
 
-        at: range P2:S2;
+     sheetName: 'Figure S5.1.2';
 
-        write: [
-            "Country Code",
-            "Economy",
-            "GDP per Capita",
-            "Bond Issuance Share"
-        ];
-    }
+  }
 
 
 
-valuetype BondValue oftype decimal {
-        constraints: [ firstValue ];
-    }
-    constraint firstValue oftype RangeConstraint {
-        lowerBound: 0.0;
-   	    lowerBoundInclusive: true;
-   	    upperBound: 1.0;
-	    upperBoundInclusive: true;
-    }
+  block dataSelector oftype CellRangeSelector{
 
-    valuetype GDPValue oftype decimal {
-        constraints: [ Secondvalue ];
-    }
+     select: range P2:S45;
+
+  }
+
+
+
+  block dataHeaderWriter oftype CellWriter{
+
+     at: range P2:S2;
+
+      write: [
+          "Country Code",
+          "Economy",
+          "GDP per Capita",
+          "Bond Issuance Share"
+       ];
+  }
+
+
+  valuetype BondValue oftype decimal{
+
+    constraints: [ firstValue ];
+
+  }
+
+
+  constraint firstValue oftype RangeConstraint{
+
+    lowerBound: 0.0;
+   	lowerBoundInclusive: true;
+   	upperBound: 1.0;
+	upperBoundInclusive: true;
+
+  }
+
+  valuetype GDPValue oftype decimal{
+
+    constraints: [ Secondvalue ];
+
+  }
     
-    constraint Secondvalue oftype RangeConstraint {
-        lowerBound: 0.0;
-   	    lowerBoundInclusive: false;    
-    }
+  constraint Secondvalue oftype RangeConstraint{
+
+    lowerBound: 0.0;
+   	lowerBoundInclusive: false;   
+
+  }
 
 
-    block firstDataTableInterpreter oftype TableInterpreter {
+  block firstDataTableInterpreter oftype TableInterpreter{
 
-        header: true;
+    header: true;
 
-        columns: [
-            "Country Code" oftype CountryCodeAlpha3,
-            "Bond Issuance Share" oftype BondValue
-        ];
-    }
+    columns: [
+      "Country Code" oftype CountryCodeAlpha3,
+      "Bond Issuance Share" oftype BondValue
+    ];
+  }
 
-    block bondIssuanceDataLoader oftype SQLiteLoader {
-        table: "bondIssuance";
-        file: "./country-stats.sqlite";
-    }
+  block bondIssuanceDataLoader oftype SQLiteLoader{
+    table: "bondIssuance";
+    file: "./country-stats.sqlite";
+  }
 
-    block secondDataTableInterpreter oftype TableInterpreter {
-        header: true;
+  block secondDataTableInterpreter oftype TableInterpreter{
+    header: true;
 
-        columns: [
-            "Country Code" oftype CountryCodeAlpha3,
-            "GDP per Capita" oftype GDPValue
-        ];
-    }
+    columns: [
+      "Country Code" oftype CountryCodeAlpha3,
+      "GDP per Capita" oftype GDPValue
+    ];
+  }
 
 
-    block gdpPerCapitaLoader oftype SQLiteLoader {
-        table: "gdpPerCapita";
-        file: "./country-stats.sqlite";
-    }
+  block gdpPerCapitaLoader oftype SQLiteLoader{
+      table: "gdpPerCapita";
+      file: "./country-stats.sqlite";
+  }
+
 }
