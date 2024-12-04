@@ -1,0 +1,82 @@
+pipeline ex4TempPipeline {
+    
+  ex4TempExtractor
+    -> ex4TempFilePicker
+    -> ex4TempTextFileInterpreter
+    -> ex4TempCSVInterpreter
+    -> ex4RenameColumns1
+    -> ex4RenameColumns2
+    -> ex4TempTableInterpreter
+    -> ex4TemperatureTransformer
+    -> ex4Battery_temperatureTransformer
+    -> ex4TempLoader; 
+
+  block ex4TempExtractor oftype GTFSExtractor {
+    url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+  }
+
+  block ex4TempFilePicker oftype FilePicker {
+    path: "/data.csv";
+  }
+
+  block ex4TempTextFileInterpreter oftype TextFileInterpreter { }
+
+  block ex4TempCSVInterpreter oftype CSVInterpreter { 
+    delimiter: ";" ;
+  }
+   
+  block ex4RenameColumns1 oftype CellWriter {
+    at: range A1:E1;
+    write: ["id", "producer", "model", "month", "temperature"];
+  }
+
+  block ex4RenameColumns2 oftype CellWriter {
+    at: cell J1;
+    write: ["battery_temperature"];
+  }
+
+  constraint range1 oftype RangeConstraint {
+    lowerBound: 0;
+    lowerBoundInclusive: false;
+  }
+
+  valuetype positiveInt oftype integer {
+    constraints: [range1];
+  }
+
+
+  block ex4TemperatureTransformer oftype TableTransformer {
+    inputColumns: ["temperature"];
+    outputColumn: "temperature";
+    uses: tempConverter;
+  }
+
+  block ex4Battery_temperatureTransformer oftype TableTransformer {
+    inputColumns: ["battery_temperature"];
+    outputColumn: "battery_temperature";
+    uses: tempConverter;
+  }
+
+  transform tempConverter {
+    from celsius oftype decimal;
+    to fahrenheit oftype decimal;
+    fahrenheit: (celsius*9/5)+32;
+  }
+
+  block ex4TempTableInterpreter oftype TableInterpreter {
+    header: true;
+      columns:[
+        "id" oftype positiveInt,
+        "producer" oftype text,
+        "model" oftype text,
+        "month" oftype integer,
+        "temperature" oftype decimal,
+        "battery_temperature" oftype decimal
+      ];
+   }
+
+  block ex4TempLoader oftype SQLiteLoader {
+    table: "temperatures";
+    file: "./temperatures.sqlite";
+  }
+}
