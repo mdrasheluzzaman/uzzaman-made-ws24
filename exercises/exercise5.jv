@@ -1,0 +1,84 @@
+pipeline ex5GTFSPipeline {
+    ex5GTFSExtractor
+        -> ex5GTFSFilePicker
+        -> ex5GTFSTextFileInterpreter
+        -> ex5GTFSCSVInterpreter
+        -> ex5GTFSdataTableInterpreter
+        -> ex5GTFSdataLoader;     
+
+    block ex5GTFSExtractor oftype GTFSExtractor {
+        url: "https://gtfs.rhoenenergie-bus.de/GTFS.zip";
+    }
+
+    block ex5GTFSFilePicker oftype FilePicker {
+        path: "/stops.txt";
+    }
+
+    block ex5GTFSTextFileInterpreter oftype TextFileInterpreter { 
+        encoding: "utf8";  
+    }
+
+    block ex5GTFSCSVInterpreter oftype CSVInterpreter {
+        delimiter: ',';
+        enclosing: '"';
+    }
+
+    constraint range1 oftype RangeConstraint {
+        lowerBound: 1925;
+        lowerBoundInclusive: true;
+        upperBound: 1925;
+        upperBoundInclusive: true;
+    }
+
+    valuetype zone oftype integer {
+        constraints: [range1];
+    }
+
+    constraint range2 oftype RangeConstraint {
+        lowerBound: -90;
+        lowerBoundInclusive: true;
+        upperBound: 90;
+        upperBoundInclusive: true;
+    }
+
+    valuetype coordinate oftype decimal {
+        constraints: [range2];
+    }
+
+    constraint regex oftype RangeConstraint {
+        lowerBound: -90;
+        lowerBoundInclusive: true;
+        upperBound: 90;
+        upperBoundInclusive: true;
+    }
+
+    valuetype name oftype decimal {
+        constraints: [regex1];
+    }
+
+
+  constraint regex1 oftype RegexConstraint {
+
+    regex: /^[A-ZÄÖÜ][a-zäöüß]+(?:[-\s][A-ZÄÖÜ][a-zäöüß]+)*$/;
+
+  }
+
+
+
+
+    block ex5GTFSdataTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns:[
+            "stop_id" oftype integer,
+            "stop_name" oftype text,
+            "stop_lat" oftype coordinate,
+            "stop_lon" oftype coordinate,
+            "zone_id" oftype zone
+        ];
+    }
+
+    block ex5GTFSdataLoader oftype SQLiteLoader {
+        table: "stops";
+        file: "./gtfs.sqlite";
+    }
+}
