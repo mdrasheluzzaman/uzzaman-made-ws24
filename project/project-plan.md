@@ -2,7 +2,7 @@
 
 ## Title
 <!-- Give your project a short title. -->
-Food Habit Analysis of North Americans
+Food Habit Analysis of the People of USA and Canada
 
 ## Main Question
 

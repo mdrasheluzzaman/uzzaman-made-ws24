@@ -1,37 +1,14 @@
-# Methods of Advanced Data Engineering Template Project
+## Title
+<!-- Give your project a short title. -->
+Food Habit Analysis of the People of USA and Canada
 
-This template project provides some structure for your open data project in the MADE module at FAU.
-This repository contains (a) a data science project that is developed by the student over the course of the semester, and (b) the exercises that are submitted over the course of the semester.
+## Main Question
 
-To get started, please follow these steps:
-1. Create your own fork of this repository. Feel free to rename the repository right after creation, before you let the teaching instructors know your repository URL. **Do not rename the repository during the semester**.
+<!-- Think about one main question you want to answer based on the data. -->
+1. Is there is any pattern in food habit in different region of North American?
 
-## Project Work
-Your data engineering project will run alongside lectures during the semester. We will ask you to regularly submit project work as milestones, so you can reasonably pace your work. All project work submissions **must** be placed in the `project` folder.
+## Description
 
-### Exporting a Jupyter Notebook
-Jupyter Notebooks can be exported using `nbconvert` (`pip install nbconvert`). For example, to export the example notebook to HTML: `jupyter nbconvert --to html examples/final-report-example.ipynb --embed-images --output final-report.html`
-
-
-## Exercises
-During the semester you will need to complete exercises using [Jayvee](https://github.com/jvalue/jayvee). You **must** place your submission in the `exercises` folder in your repository and name them according to their number from one to five: `exercise<number from 1-5>.jv`.
-
-In regular intervals, exercises will be given as homework to complete during the semester. Details and deadlines will be discussed in the lecture, also see the [course schedule](https://made.uni1.de/).
-
-### Exercise Feedback
-We provide automated exercise feedback using a GitHub action (that is defined in `.github/workflows/exercise-feedback.yml`). 
-
-To view your exercise feedback, navigate to Actions → Exercise Feedback in your repository.
-
-The exercise feedback is executed whenever you make a change in files in the `exercise` folder and push your local changes to the repository on GitHub. To see the feedback, open the latest GitHub Action run, open the `exercise-feedback` job and `Exercise Feedback` step. You should see command line output that contains output like this:
-
-```sh
-Found exercises/exercise1.jv, executing model...
-Found output file airports.sqlite, grading...
-Grading Exercise 1
-	Overall points 17 of 17
-	---
-	By category:
-		Shape: 4 of 4
-		Types: 13 of 13
-```
+<!-- Describe your data science project in max. 200 words. Consider writing about why and how you attempt it. -->
+This research aims to analyze the food habits of people in the United States (US) and Canada. This report provides the motivation behind the research, an overview of the dataset with licensing and pipeline and the methodology employed to analyze and interpret the findings. This research seeks to identify regional food preferences and trends which can serve as valuable information for those who are planning to enter the market or establish new restaurants.
+The primary motivation of this research is to investigate whether there are discernible patterns in the food preferences among people in the USA and Canada. For example, in some regions burgers are popular while in others steak are more popular. Understanding these preferences will provide valuable information for market entry strategies.
